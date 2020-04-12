@@ -1,0 +1,24 @@
+# Ignore bundler config.
+
+/.bundle
+
+
+# Ignore the default SQLite database.
+
+/db/*.db
+
+/db/*.db-journal
+
+
+# Ignore all logfiles and templates.
+
+/log/*.log
+
+/tmp
+
+
+# Ignore ruby-version
+
+/.ruby-version
+
+.env

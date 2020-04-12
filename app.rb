@@ -1,7 +1,13 @@
 require "sinatra"
 require 'sinatra/reloader' if development?
+require 'twilio-ruby'
 
 enable :sessions
+
+configure :development do
+	require 'dotenv'
+	Dotenv.load
+end
 
 # global variables
 greetings = ["Hello!", "Hi!", "Hey!", "What's up!", "Good to see you!", "Hey there!"]
