@@ -106,11 +106,12 @@ end
 get "/sms/incoming" do
 	sender = params[:From] || ""
 	body = params[:Body] || ""
-
+	media = "https://media.giphy.com/media/RIYgiYTCmostbz0wNx/giphy.gif"
 	message = "Nice to meet you!Sweet heart./nFrom #{sender} saying #{body}"
 	twiml = Twilio::TwiML::MessagingResponse.new do |r|
 		r.message do |m|
 			m.body( message )
+			m.media( media )
 		end
 	end
 
