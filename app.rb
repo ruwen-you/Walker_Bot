@@ -90,9 +90,39 @@ get '/html' do
 	erb :"signup"
 end
 
+get "/test/sms" do
+	client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
+
+	message = "This is Ruwen's first chatbot."
+
+	# This will send a message from any end point
+	client.api.account.messages.create(
+		from: ENV["TWILIO_FROM"],
+		to: ENV["TEST_NUMBER"],
+		body: message
+	)
+end
+
+get "/sms/incoming" do
+	sender = params[:From] || ""
+	body = params[:Body] || ""
+
+	message = "Nice to meet you!Sweet heart./nFrom #{sender} saying #{body}"
+	twiml = Twilio::TwiML::MessagingResponse.new do |r|
+		r.message do |m|
+			m.body( message )
+		end
+	end
+
+	content_type 'text/xml'
+	twiml.to_s
+
+end
+
 error 403 do
 	"Access Forbidden"
 end
+
 
 def determine_response body
 	#normalize and clean the string of params
