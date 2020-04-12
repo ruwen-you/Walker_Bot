@@ -104,16 +104,29 @@ get "/test/sms" do
 end
 
 get "/sms/incoming" do
+	session[:counter] ||= 0
+
 	sender = params[:From] || ""
 	body = params[:Body] || ""
-	media = "https://media.giphy.com/media/RIYgiYTCmostbz0wNx/giphy.gif"
-	message = "Nice to meet you!Sweet heart./nFrom #{sender} saying #{body}"
+
+	if session[:counter] == 0
+		message = "Hello, thanks for the new message."
+		media = "https://media.giphy.com/media/RIYgiYTCmostbz0wNx/giphy.gif"
+	else
+		message = "Hello, thanks for the message number #{session[:counter]}"
+		media = nil
+	end
+
 	twiml = Twilio::TwiML::MessagingResponse.new do |r|
 		r.message do |m|
 			m.body( message )
-			m.media( media )
+			unless media.nil?
+				m.media( media )
+			end
 		end
 	end
+
+	session[:counter] += 1
 
 	content_type 'text/xml'
 	twiml.to_s
