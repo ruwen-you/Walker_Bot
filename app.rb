@@ -124,6 +124,7 @@ get "/sms/incoming" do
 	sender = params[:From] || ""
 	body = params[:Body] || ""
 	message = determine_response body
+	media = nil
 
 	#if session[:counter] == 0
 		#message = "Hello, thanks for the new message."
