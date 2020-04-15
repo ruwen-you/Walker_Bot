@@ -123,14 +123,15 @@ get "/sms/incoming" do
 
 	sender = params[:From] || ""
 	body = params[:Body] || ""
+	message = determine_response body
 
-	if session[:counter] == 0
-		message = "Hello, thanks for the new message."
-		media = "https://media.giphy.com/media/RIYgiYTCmostbz0wNx/giphy.gif"
-	else
-		message = "Hello, thanks for the message number #{session[:counter]}"
-		media = nil
-	end
+	#if session[:counter] == 0
+		#message = "Hello, thanks for the new message."
+		#media = "https://media.giphy.com/media/RIYgiYTCmostbz0wNx/giphy.gif"
+	#else
+		#message = "Hello, thanks for the message number #{session[:counter]}"
+		#media = nil
+	#end
 
 	twiml = Twilio::TwiML::MessagingResponse.new do |r|
 		r.message do |m|
