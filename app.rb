@@ -12,7 +12,7 @@ end
 # global variables
 greetings = ["Hello!", "Hi!", "Hey!", "What's up!", "Good to see you!", "Hey there!"]
 $funny_response = ["funny right?", "Glad it makes you laugh!", "It's my pleasure to bring you joy!", "You can ask for 'joke' again and I'll tell you another one.", "I'm funny and attractive, right?"]
-$code = "meruinyou"
+code = "meruinyou"
 
 # / page and about page are the same
 get "/" do
@@ -47,7 +47,7 @@ end
 
 # signup with the secret code
 get '/signup' do
-	if params[:code].nil? or params[:code] != $code
+	if params[:code].nil? or params[:code] != code
 		403
 	else
 		erb :"signup"
