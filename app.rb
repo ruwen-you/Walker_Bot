@@ -54,6 +54,26 @@ get '/signup' do
 	end
 end
 
+# check signup
+post "/signup" do
+	if params["code"].nil? || params["code"] != code
+		403
+	elsif params['first_name'].nil? || params['number'].nil?
+		"Sorry.You haven't provided all the required information"
+	else
+		#session['first_name'] = params['first_name']
+		#session['number'] = params['number']
+		client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
+		message = "Hi" + params[:first_name] + ", welcome to Walker! I can respond to who, what, where, when and why. If you're stuck, type help."
+		client.api.account.messages.create(
+			from: ENV["TWILIO_FROM"],
+			to: params[:number],
+			body: message
+		)
+		return "Thank you for signing up! You will receive a text message in a few minutes from the bot."
+	end
+end
+
 # parameters for signup: first name and number
 get '/signup/:first_name/:number' do
 	session[:first_name] = params[:first_name]
