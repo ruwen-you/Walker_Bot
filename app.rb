@@ -83,11 +83,6 @@ get '/signup/:first_name/:number' do
 	#Your number is #{ params[:number]}"
 end
 
-# to do
-get '/incoming/sms' do
-	403
-end
-
 # conversation page
 get '/test/conversation' do
 	# check if the user input text (Body) and number (From). If not, remind
