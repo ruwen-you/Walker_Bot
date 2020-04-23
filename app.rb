@@ -163,9 +163,8 @@ def determine_media_response body
   results = Giphy.search( "lolz", { limit: 25 } )
 
   unless results.empty?
-    gif = results.sample
-    gif_url = gif.original_image.url
-    "I found this image: <img src='#{gif_url}' />"
+    gif = results.sample.fixed_width_downsampled_image.url.to_s
+    return gif
 
   else
     " I couldn't find a gif for that "
