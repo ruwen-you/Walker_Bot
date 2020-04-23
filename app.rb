@@ -155,20 +155,23 @@ get "/sms/incoming" do
 end
 
 def determine_media_response body
-
-  Giphy::Configuration.configure do |config|
-    config.api_key = ENV["GIPHY_API_KEY"]
-  end
-
-  results = Giphy.search( "lolz", { limit: 25 } )
-
-  unless results.empty?
-    gif = results.sample.fixed_width_downsampled_image.url.to_s
-    return gif
-
-  else
-    " I couldn't find a gif for that "
-  end
+	q = body.to_s.downcase.strip
+	Giphy::Configuration.configure do |config|
+		config.api_key = ENV["GIPHY_API_KEY"]
+	end
+	if q == "surprise"
+		giphy_search = "hello"
+	else
+		giphy_search = nil
+	end
+	unless giphy_search.nil?
+		results = Giphy.search( giphy_search, { limit: 25 } )
+		unless results.empty?
+			gif = results.sample.fixed_width_downsampled_image.url.to_s
+			return gif
+		end
+	end
+	nil
 end
 
 error 403 do
