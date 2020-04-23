@@ -1,6 +1,8 @@
 require "sinatra"
 require 'sinatra/reloader' if development?
 require 'twilio-ruby'
+require 'httparty'
+require 'json'
 
 enable :sessions
 
@@ -189,6 +191,39 @@ def determine_response body
 	# response to haha or lol
 	elsif body == "haha" or body == "lol"
 		response += $funny_response.sample
+	else
+		message = "Sorry, your input cannot be understood by the bot."
+		response = send_to_slack message
 	end
 	response
+end
+
+def send_to_slack message
+	slack_webhook = ENV['SLACK_WEBHOOK']
+
+  formatted_message = "*Recently Received:*\n"
+  formatted_message += "#{message} "
+
+  HTTParty.post slack_webhook, body: {text: formatted_message.to_s, username: "MyBot" }.to_json, headers: {'content-type' => 'application/json'}
+end
+
+
+get "/test/deckofcards/randomcard" do
+	response = HTTParty.get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
+	puts response.body
+
+	deck_id = response["deck_id"]
+	puts "Deck id is #{deck_id}"
+
+	random_card_url = "https://deckofcardsapi.com/api/deck/#{deck_id}/draw/?count=2"
+	response = HTTParty.get(random_card_url)
+	puts response.body
+	#response["cards"].to_json
+	response_str = "You have drawn "
+	response["cards"].each do |card|
+		suit = card["suit"]
+		val = card["value"]
+		response_str = response_str + "the #{val} of #{suit}, "
+	end
+	response_str
 end
