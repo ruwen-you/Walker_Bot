@@ -3,6 +3,8 @@ require 'sinatra/reloader' if development?
 require 'twilio-ruby'
 require 'httparty'
 require 'json'
+require 'giphy'
+require 'faraday'
 
 enable :sessions
 
@@ -152,6 +154,24 @@ get "/sms/incoming" do
 
 end
 
+def determine_media_response body
+
+  Giphy::Configuration.configure do |config|
+    config.api_key = ENV["GIPHY_API_KEY"]
+  end
+
+  results = Giphy.search( "lolz", { limit: 25 } )
+
+  unless results.empty?
+    gif = results.sample
+    gif_url = gif.original_image.url
+    "I found this image: <img src='#{gif_url}' />"
+
+  else
+    " I couldn't find a gif for that "
+  end
+end
+
 error 403 do
 	"Access Forbidden"
 end
@@ -191,6 +211,8 @@ def determine_response body
 	# response to haha or lol
 	elsif body == "haha" or body == "lol"
 		response += $funny_response.sample
+	elsif body == "surprise"
+		response = determine_media_response body
 	else
 		message = "Sorry, your input cannot be understood by the bot."
 		response = send_to_slack message
