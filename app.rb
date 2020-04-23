@@ -5,12 +5,17 @@ require 'httparty'
 require 'json'
 require 'giphy'
 require 'faraday'
+require 'open_weather'
 
 enable :sessions
 
 configure :development do
 	require 'dotenv'
 	Dotenv.load
+	require 'did_you_mean'
+	require 'better_errors'
+	use BetterErrors::Middleware
+	BetterErrors.application_root = __dir__
 end
 
 # global variables
@@ -215,6 +220,12 @@ def determine_response body
 		response += $funny_response.sample
 	elsif body == "surprise"
 		response = determine_media_response body
+	elsif body == "weather"
+		options = { units: "metric", APPID: ENV["OPENWEATHER_API_KEY"] }
+		response = OpenWeather::Current.city("Pittsburgh, PA", options)
+		temp = response['main']['temp']
+		desc = response['weather'][0]['description']
+		response = "The weather is currently #{desc} with a temperature of #{temp} degrees."
 	else
 		message = "Sorry, your input cannot be understood by the bot."
 		response = send_to_slack message
