@@ -10,9 +10,15 @@ GEM
       rack (>= 0.9.0)
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
+    careerjet-api-client (3.1.2)
+      hashie
+      multi_json
+      rest-client
     coderay (1.1.2)
     debug_inspector (0.0.3)
     did_you_mean (1.4.0)
+    domain_name (0.5.20190701)
+      unf (>= 0.0.5, < 1.0.0)
     dotenv (2.7.5)
     erubi (1.9.0)
     faraday (0.9.0)
@@ -29,6 +35,9 @@ GEM
       faraday_middleware-parse_oj (~> 0.3)
       launchy (~> 2.4)
     hashie (3.6.0)
+    http-accept (1.7.0)
+    http-cookie (1.0.3)
+      domain_name (~> 0.5)
     httparty (0.18.0)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
@@ -36,9 +45,9 @@ GEM
     jwt (2.2.1)
     launchy (2.5.0)
       addressable (~> 2.7)
-    linkedin (1.1.1)
-      hashie (~> 3.0)
-      multi_json (~> 1.0)
+    linkedin-oauth2 (1.0.0)
+      faraday (~> 0.9)
+      hashie (~> 3.2)
       oauth2 (~> 1.0)
     mime-types (3.3.1)
       mime-types-data (~> 3.2015)
@@ -49,6 +58,7 @@ GEM
     multipart-post (2.1.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
+    netrc (0.11.0)
     nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
     oauth2 (1.4.4)
@@ -64,6 +74,11 @@ GEM
     rack (2.2.2)
     rack-protection (2.0.8.1)
       rack
+    rest-client (2.1.0)
+      http-accept (>= 1.7.0, < 2.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     ruby2_keywords (0.0.2)
     sinatra (2.0.8.1)
       mustermann (~> 1.0)
@@ -82,6 +97,9 @@ GEM
       faraday (>= 0.9, < 2.0)
       jwt (>= 1.5, <= 2.5)
       nokogiri (>= 1.6, < 2.0)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.7)
 
 PLATFORMS
   ruby
@@ -89,13 +107,14 @@ PLATFORMS
 DEPENDENCIES
   better_errors
   binding_of_caller
+  careerjet-api-client
   did_you_mean
   dotenv
   faraday (= 0.9)
   giphy (= 3.0.0)
   httparty (= 0.18.0)
   json (= 2.3.0)
-  linkedin
+  linkedin-oauth2 (~> 1.0)
   open-weather (= 0.11)
   sinatra
   sinatra-contrib

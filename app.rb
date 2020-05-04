@@ -6,7 +6,8 @@ require 'json'
 require 'giphy'
 require 'faraday'
 require 'open_weather'
-require 'linkedin'
+require 'linkedin-oauth2'
+require "careerjet/api_client"
 
 enable :sessions
 
@@ -161,11 +162,29 @@ get "/sms/incoming" do
 end
 
 get "/callback" do
-	client = LinkedIn::Client.new(ENV['LINKEDIN_API_KEY'], ENV['LINKEDIN_API_SECRET'])
-	api = LinkedIn::Api.new(ENV['LINKEDIN_TOKEN'])
-	me=api.profile
-	#client.authorize_from_request(params[:code], :redirect_uri => 'https://git.heroku.com/fathomless-lake-42472.git/callback')
+	LinkedIn.configure do |config|
+		config.client_id     = ENV["LINKEDIN_API_KEY"]
+		config.client_secret = ENV["LINKEDIN_API_SECRET"]
+		config.redirect_uri  = "https://git.heroku.com/fathomless-lake-42472.git/callback"
+	end
 end
+	#api = LinkedIn::API.new(ENV['LINKEDIN_TOKEN'])
+	#me = api.profile
+
+get "/test-career" do
+	cj_api_client = Careerjet::APIClient.new(:locale=> :en_GB)
+
+	cj_api_client.search(
+     	:keywords   => 'ruby',
+     	:location   => 'london',
+     	:affid      => '213e213hd12344552',
+     	:user_ip    => '11.22.33.44',
+     	:user_agent => 'Mozilla/5.0 (X11; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/31.0',
+     	:url        => 'http://www.example.com/jobsearch?q=ruby&l=london'
+ 	).jobs.first
+end
+
+
 
 def determine_media_response body
 	q = body.to_s.downcase.strip
@@ -271,6 +290,13 @@ get "/test/deckofcards/randomcard" do
 	response_str
 end
 
-get "/test/jobs/skills" do
-	response = HTTParty.get("")
+
+get "/test/jobs-skills" do
+	response = HTTParty.get("http://api.dataatwork.org/v1/jobs/autocomplete?contains='production'")
+	puts response.body
+end
+
+get "/test/muse" do
+	response = HTTParty.get("https://www.themuse.com/api/public/jobs?level=Entry%20Level&page=1")
+	puts response.body
 end
