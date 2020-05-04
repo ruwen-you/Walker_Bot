@@ -162,7 +162,7 @@ end
 
 get "/callback" do
 	client = LinkedIn::Client.new(ENV['LINKEDIN_API_KEY'], ENV['LINKEDIN_API_SECRET'])
-	client.authorize_url(:redirect_uri => 'https://git.heroku.com/fathomless-lake-42472.git/callback', :state => SecureRandom.uuid, :scope => "r_liteprofile+r_emailaddress") => "https://api.linkedin.com/uas/oauth2/authorization?"
+	client.authorize_url(:redirect_uri => 'https://git.heroku.com/fathomless-lake-42472.git/callback', :state => SecureRandom.uuid, :scope => "r_liteprofile+r_emailaddress")
 	client.authorize_from_request(params[:code], :redirect_uri => 'https://git.heroku.com/fathomless-lake-42472.git/callback')
 	#client.authorize_from_request(params[:code], :redirect_uri => 'https://git.heroku.com/fathomless-lake-42472.git/callback')
 end
