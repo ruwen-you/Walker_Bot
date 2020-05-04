@@ -173,20 +173,6 @@ end
 	#api = LinkedIn::API.new(ENV['LINKEDIN_TOKEN'])
 	#me = api.profile
 
-get "/test-career" do
-	cj_api_client = Careerjet::APIClient.new(:locale=> :en_GB)
-
-	cj_api_client.search(
-     	:keywords   => 'ruby',
-     	:location   => 'london',
-     	:affid      => '213e213hd12344552',
-     	:user_ip    => '11.22.33.44',
-     	:user_agent => 'Mozilla/5.0 (X11; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/31.0',
-     	:url        => 'http://www.example.com/jobsearch?q=ruby&l=london'
- 	).jobs.first
-end
-
-
 
 def determine_media_response body
 	q = body.to_s.downcase.strip
