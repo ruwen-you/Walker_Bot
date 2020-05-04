@@ -161,11 +161,11 @@ get "/sms/incoming" do
 end
 
 get "/callback" do
-	#LinkedIn.configure do |config|
-		#config.client_id     = ENV["LINKEDIN_API_KEY"]
-		#config.client_secret = ENV["LINKEDIN_API_SECRET"]
-		#config.redirect_uri  = "https://git.heroku.com/fathomless-lake-42472.git/callback"
-	#end
+	LinkedIn.configure do |config|
+		config.client_id     = ENV["LINKEDIN_API_KEY"]
+		config.client_secret = ENV["LINKEDIN_API_SECRET"]
+		config.redirect_uri  = "https://git.heroku.com/fathomless-lake-42472.git/callback"
+	end
 
 	api = LinkedIn::API.new(ENV['LINKEDIN_TOKEN'])
 	me = api.profile
