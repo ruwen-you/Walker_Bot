@@ -161,7 +161,7 @@ get "/sms/incoming" do
 end
 
 get "/callback" do
-	client = LinkedIn::Client.new('LINKEDIN_API_KEY', 'LINKEDIN_API_SECRET')
+	client = LinkedIn::Client.new(ENV['LINKEDIN_API_KEY'], ENV['LINKEDIN_API_SECRET'])
 	client.authorize_url(:redirect_uri => 'https://git.heroku.com/fathomless-lake-42472.git/callback', :state => SecureRandom.uuid, :scope => "r_basicprofile+r_emailaddress")
 	#client.authorize_from_request(params[:code], :redirect_uri => 'https://git.heroku.com/fathomless-lake-42472.git/callback')
 end
