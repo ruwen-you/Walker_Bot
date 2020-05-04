@@ -7,7 +7,6 @@ gem 'httparty', '0.18.0'
 gem 'json', '2.3.0'
 gem 'giphy', '3.0.0'
 gem 'faraday', '0.9'
-gem 'open-weather', '0.11'
 gem "linkedin-oauth2", "~> 1.0"
 gem 'careerjet-api-client'
 

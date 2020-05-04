@@ -5,7 +5,6 @@ require 'httparty'
 require 'json'
 require 'giphy'
 require 'faraday'
-require 'open_weather'
 require 'linkedin-oauth2'
 require "careerjet/api_client"
 
@@ -162,14 +161,14 @@ get "/sms/incoming" do
 end
 
 get "/callback" do
-	LinkedIn.configure do |config|
-		config.client_id     = ENV["LINKEDIN_API_KEY"]
-		config.client_secret = ENV["LINKEDIN_API_SECRET"]
-		config.redirect_uri  = "https://git.heroku.com/fathomless-lake-42472.git/callback"
-	end
+	#LinkedIn.configure do |config|
+		#config.client_id     = ENV["LINKEDIN_API_KEY"]
+		#config.client_secret = ENV["LINKEDIN_API_SECRET"]
+		#config.redirect_uri  = "https://git.heroku.com/fathomless-lake-42472.git/callback"
+	#end
 
-	code = 'AQQHK-i6N6MIy3B2Jf81wdnmgOW9YDm5lfgN4tnVcWH6bph12FmPd5Rmb1l3Augrz7rrTkn5GUrL21ucvxEt0fO6FnrUbK7vIvpAf2PWkv3HF3odnFLBN6yaB8MUEECNMaptgv8h7qFseylj7imvFcU029jjSfCyZZsWrM5RuYSKFWKTEcqER5yGDvcmRA'
-	access_token = oauth.get_access_token(code)
+	api = LinkedIn::API.new(ENV['LINKEDIN_TOKEN'])
+	me = api.profile
 end
 	#api = LinkedIn::API.new(ENV['LINKEDIN_TOKEN'])
 	#me = api.profile
@@ -250,12 +249,6 @@ def determine_response body
 		response += $funny_response.sample
 	elsif body == "surprise"
 		response = determine_media_response body
-	elsif body == "weather"
-		options = { units: "metric", APPID: ENV["OPENWEATHER_API_KEY"] }
-		response = OpenWeather::Current.city("Pittsburgh, PA", options)
-		temp = response['main']['temp']
-		desc = response['weather'][0]['description']
-		response = "The weather is currently #{desc} with a temperature of #{temp} degrees."
 	else
 		message = "Sorry, your input cannot be understood by the bot."
 		response = send_to_slack message
