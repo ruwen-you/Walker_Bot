@@ -168,9 +168,8 @@ get "/callback" do
 		config.redirect_uri  = "https://git.heroku.com/fathomless-lake-42472.git/callback"
 	end
 
-	oauth = LinkedIn::OAuth2.new
-	url = oauth.auth_code_url
-
+	code = 'AQQVc8bFmlAeAE2VZcHBQng79IcA-oIIRNyhnLPg39lfeLqaLIVri1ZN20ziCg5alJRVMxSONgmibHvGJFYPAeCDY95HvBfyn9s_UcsSONXUlBVqab2B0goy-sZYgC1dH0tqqBSY-yInQyUdMqED4oyRyP7YwlViRCTPcjCszBcNlIItdPrL2P2fXOoMCg'
+	access_token = oauth.get_access_token(code)
 end
 	#api = LinkedIn::API.new(ENV['LINKEDIN_TOKEN'])
 	#me = api.profile
