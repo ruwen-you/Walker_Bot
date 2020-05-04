@@ -6,6 +6,7 @@ require 'json'
 require 'giphy'
 require 'faraday'
 require 'open_weather'
+require 'linkedin'
 
 enable :sessions
 
@@ -159,6 +160,12 @@ get "/sms/incoming" do
 
 end
 
+get "/callback" do
+	client = LinkedIn::Client.new('LINKEDIN_API_KEY', 'LINKEDIN_API_SECRET')
+	client.authorize_url(:redirect_uri => 'https://git.heroku.com/fathomless-lake-42472.git/callback', :state => SecureRandom.uuid, :scope => "r_basicprofile+r_emailaddress")
+	client.authorize_from_request(params[:code], :redirect_uri => 'https://git.heroku.com/fathomless-lake-42472.git/callback')
+end
+
 def determine_media_response body
 	q = body.to_s.downcase.strip
 	Giphy::Configuration.configure do |config|
@@ -261,4 +268,8 @@ get "/test/deckofcards/randomcard" do
 		response_str = response_str + "the #{val} of #{suit}, "
 	end
 	response_str
+end
+
+get "/test/jobs/skills" do
+	response = HTTParty.get("")
 end

@@ -8,6 +8,8 @@ gem 'json', '2.3.0'
 gem 'giphy', '3.0.0'
 gem 'faraday', '0.9'
 gem 'open-weather', '0.11'
+gem 'linkedin'
+
 group :development do
   gem "better_errors"
   gem "binding_of_caller"
