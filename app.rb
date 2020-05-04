@@ -162,7 +162,7 @@ end
 
 get "/callback" do
 	client = LinkedIn::Client.new(ENV['LINKEDIN_API_KEY'], ENV['LINKEDIN_API_SECRET'])
-	api = LinkedIn::API.new(ENV['LINKEDIN_TOKEN'])
+	api = LinkedIn::Api.new(ENV['LINKEDIN_TOKEN'])
 	me=api.profile
 	#client.authorize_from_request(params[:code], :redirect_uri => 'https://git.heroku.com/fathomless-lake-42472.git/callback')
 end
