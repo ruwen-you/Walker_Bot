@@ -5,7 +5,7 @@ require 'httparty'
 require 'json'
 require 'giphy'
 require 'faraday'
-require 'linkedin-oauth2'
+require 'linkedin-v2'
 require "careerjet/api_client"
 
 enable :sessions
