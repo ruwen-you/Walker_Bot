@@ -80,7 +80,8 @@ post "/signup" do
 		#session['first_name'] = params['first_name']
 		#session['number'] = params['number']
 		client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
-		message = "#{first_greeting} #{params[:first_name]}. If you want to know more about me, please reply 'what'"
+		family = emoji "family"
+		message = "#{first_greeting} #{params[:first_name]}. If you want to know more about me#{family}, please reply 'what'".
 		client.api.account.messages.create(
 			from: ENV["TWILIO_FROM"],
 			to: params[:number],
