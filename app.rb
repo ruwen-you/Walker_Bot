@@ -210,7 +210,7 @@ error 403 do
 end
 
 
-def determine_response body, sender
+def determine_response body
 	#normalize and clean the string of params
 	body = body.downcase.strip
 
@@ -221,9 +221,7 @@ def determine_response body, sender
 		response += general_greeting
 	# response to who
 	elsif body == "who"
-		send_sms_to sender, "I'm Walker."
-		sleep(1)
-		response += "#{problem}"
+		response += "I'm Walker.If you are interested in me, you can learn more by asking me for 'fact'."
 	# response to what or help
 	elsif body == "what" || body == "help"
 		response += problem
@@ -343,4 +341,4 @@ def send_sms_to send_to, message
 	   to: send_to,
 	   body: message
 	 )
-end
+ end
