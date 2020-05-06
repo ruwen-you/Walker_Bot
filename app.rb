@@ -80,7 +80,7 @@ post "/signup" do
 		#session['first_name'] = params['first_name']
 		#session['number'] = params['number']
 		client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
-		message = "#{first_greeting} #{params[:first_name]}. I can respond to who, what, where, when and why. If you're stuck, type help."
+		message = "#{first_greeting} #{params[:first_name]}. If you want to know more about me, please reply 'what'"
 		client.api.account.messages.create(
 			from: ENV["TWILIO_FROM"],
 			to: params[:number],
@@ -235,7 +235,7 @@ def determine_response body, sender
 		smirk = emoji "smirk"
 		response += "I'm Walker! I'm smart #{smirk} and know all of the skills and jobs in the world."
 	# response to what or help
-	elsif include_keywords body, what_kwd
+	elsif include_keywords body, who_kwd
 		confused = emoji "confused"
 		send_sms_to sender, "Do you feel confused #{confused}?"
 		sleep(2)
@@ -243,7 +243,7 @@ def determine_response body, sender
 		sleep(2)
 		send_sms_to sender, "They require the same skills but have different titles!"
 		sleep(2)
-		send_sms_to sender, "Then how can you what title to search?"
+		send_sms_to sender, "Then how can you know what title to search?"
 		sleep(2)
 		response += "Well, I can help you to find similar job titles and skills to search more jobs!"
 	# response to where
