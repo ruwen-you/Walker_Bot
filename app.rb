@@ -142,15 +142,15 @@ get "/sms/incoming" do
 	sender = params[:From] || ""
 	body = params[:Body] || ""
 	message = determine_response body, sender
-	media = nil
+	media = determine_media_response body
 
-	#if session[:counter] == 0
-		#message = "Hello, thanks for the new message."
-		#media = "https://media.giphy.com/media/RIYgiYTCmostbz0wNx/giphy.gif"
-	#else
-		#message = "Hello, thanks for the message number #{session[:counter]}"
-		#media = nil
-	#end
+	if session[:counter] == 3
+		message = "Hello, thanks for the new message."
+		media = "https://media.giphy.com/media/RIYgiYTCmostbz0wNx/giphy.gif"
+	else
+		message = "Hello, thanks for the message number #{session[:counter]}"
+		media = nil
+	end
 
 	twiml = Twilio::TwiML::MessagingResponse.new do |r|
 		r.message do |m|
@@ -198,7 +198,7 @@ def determine_media_response body
 	unless giphy_search.nil?
 		results = Giphy.search( giphy_search, { limit: 25 } )
 		unless results.empty?
-			gif = results.sample.fixed_width_downsampled_image.url.to_s
+			gif = results.sample.image_original.url.to_s
 			return gif
 		end
 	end
