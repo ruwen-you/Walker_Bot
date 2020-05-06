@@ -5,8 +5,13 @@ require 'httparty'
 require 'json'
 require 'giphy'
 require 'faraday'
-require 'linkedin'
+require 'linkedin-v2'
 require "careerjet/api_client"
+require 'hashie'
+require 'multi_json'
+require 'oauth'
+require 'emoji'
+require 'sentimental'
 
 enable :sessions
 
@@ -163,21 +168,17 @@ get "/sms/incoming" do
 end
 
 get "/callback" do
-	client = LinkedIn::Client.new(ENV["LINKEDIN_API_KEY"], ENV["LINKEDIN_API_SECRET"])
-	client.authorize_from_access(ENV['LINKEDIN_TOKEN'])
-	linkedin = JSON.parse(client.profile.to_json)
-	puts linkedin
-	"#{linkedin}"
-	#LinkedIn.configure do |config|
-		#config.client_id     = ENV["LINKEDIN_API_KEY"]
-		#config.client_secret = ENV["LINKEDIN_API_SECRET"]
-		#config.redirect_uri  = "https://fathomless-lake-42472.herokuapp.com/callback"
-	#end
 
-	#api = LinkedIn::API.new(ENV['LINKEDIN_TOKEN'])
-	#linkedin = JSON.parse(api.profile.to_json)
-  #puts linkedin
-	#{}"#{linkedin}"
+	LinkedIn.configure do |config|
+		config.client_id     = ENV["LINKEDIN_API_KEY"]
+		config.client_secret = ENV["LINKEDIN_API_SECRET"]
+		config.redirect_uri  = "https://fathomless-lake-42472.herokuapp.com/callback"
+	end
+
+	api = LinkedIn::API.new(ENV['LINKEDIN_TOKEN'])
+	linkedin = JSON.parse(api.profile(:url => 'https://www.linkedin.com/in/kl-larson/').to_json)
+  puts linkedin
+	"#{linkedin}"
 end
 	#api = LinkedIn::API.new(ENV['LINKEDIN_TOKEN'])
 	#me = api.profile
@@ -211,11 +212,13 @@ end
 def determine_response body
 	#normalize and clean the string of params
 	body = body.downcase.strip
+	index = Emoji::Index.new
 	#responses
 	response = " "
 	# response to hi
 	if body == "hi"
-		response += "Hi! I'm Networker. I can help you manage your connections on LinkedIn."
+		emoji = index.find_by_name('wink')
+		response += "Hi! I'm Walker #{emoji}. Do you feel confused when you see so many different names for different jobs and skills? I can help you!"
 	# response to who
 	elsif body == "who"
 		response += "I'm a MeBot.If you are interested in me, you can learn more by asking me for 'fact'."
@@ -282,11 +285,26 @@ end
 
 
 get "/test/jobs-skills" do
-	response = HTTParty.get("http://api.dataatwork.org/v1/jobs/autocomplete?contains='production'")
-	puts response.body
+	id = HTTParty.get("http://api.dataatwork.org/v1/jobs/normalize?job_title='software'")[0]["uuid"]
+	associate = HTTParty.get("http://api.dataatwork.org/v1/jobs/#{id}/related_jobs")
+	puts associate
 end
 
 get "/test/muse" do
-	response = HTTParty.get("https://www.themuse.com/api/public/jobs?level=Entry%20Level&page=1")
-	puts response.body
+	response = HTTParty.get("https://www.themuse.com/api/public/jobs?level=Entry%20Level&page=1")["results"][0]["name"]
+	response
+end
+
+get "/test/emoji" do
+	index = Emoji::Index.new
+	emoji = index.find_by_name('smiley_sleeping')
+	"#{emoji}"
+end
+
+get "/test/sentiment" do
+	analyzer = Sentimental.new
+	analyzer.load_defaults
+	result = analyzer.sentiment "I didn't get the job"
+	puts result
+	"#{result}"
 end

@@ -7,8 +7,13 @@ gem 'httparty', '0.18.0'
 gem 'json', '2.3.0'
 gem 'giphy', '3.0.0'
 gem 'faraday', '0.11'
-gem "linkedin"
+gem "linkedin-v2", "~> 0.1.0"
 gem 'careerjet-api-client'
+gem 'hashie'
+gem 'multi_json'
+gem 'oauth'
+gem 'emoji'
+gem 'sentimental'
 
 group :development do
   gem "better_errors"
