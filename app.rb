@@ -80,8 +80,7 @@ post "/signup" do
 		#session['first_name'] = params['first_name']
 		#session['number'] = params['number']
 		client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
-		message = "#{first_greeting} #{params[:first_name]}. You can reply 'what' to know more about me."
-
+		message = "#{first_greeting} #{params[:first_name]}. I can respond to who, what, where, when and why. If you're stuck, type help."
 		client.api.account.messages.create(
 			from: ENV["TWILIO_FROM"],
 			to: params[:number],
@@ -122,6 +121,20 @@ get '/html' do
 	erb :"signup"
 end
 
+get "/test/sms" do
+	client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
+
+	message = "This is Ruwen's first chatbot."
+
+	# This will send a message from any end point
+	client.api.account.messages.create(
+		from: ENV["TWILIO_FROM"],
+		to: ENV["TEST_NUMBER"],
+		body: message
+	)
+
+
+end
 
 get "/sms/incoming" do
 	session[:counter] ||= 0
@@ -197,12 +210,12 @@ error 403 do
 end
 
 
-def determine_response body, sender
+def determine_response body
 	#normalize and clean the string of params
 	body = body.downcase.strip
 
 	#responses
-	response = ""
+	response = " "
 	# response to hi
 	if body == "hi"
 		response += general_greeting
@@ -211,9 +224,7 @@ def determine_response body, sender
 		response += "I'm a MeBot.If you are interested in me, you can learn more by asking me for 'fact'."
 	# response to what or help
 	elsif body == "what" || body == "help"
-		send_sms_to sender, problem
-		sleep(1)
-		response += "Now you can blabla."
+		response += problem
 	# response to where
 	elsif body == "where"
 		response += "I'm in Pittsburgh."
