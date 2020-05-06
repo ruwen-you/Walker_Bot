@@ -209,22 +209,35 @@ end
 
 
 def determine_response body, sender
+	#keywords
+	greeting_kwd = ['hi', 'hello', 'hey']
+	who_kwd = ['who']
+	what_kwd = ['what', 'features', 'functions', 'actions', 'help']
+	where_kwd = ['where']
+	when_kwd = ['when', 'time']
+	why_kwd = ['why']
+	joke_kwd = ['joke']
+	fact_kwd = ['fact']
+	funny_kwd = ['lol', 'haha', 'hh']
+
 	#normalize and clean the string of params
 	body = body.downcase.strip
 
 	#responses
 	response = " "
 	# response to hi
-	if body == "hi"
+	if include_keywords body, greeting_kwd
 		send_sms_to sender, general_greeting
 		sleep(1)
 		response += "You can reply help to check what I can do for you."
 	# response to who
-	elsif str.include? "who"
-		response += "I'm Walker! I'm smart #{emoji 'smirk'} and know all of the skills and jobs in the world."
+	elsif include_keywords body, who_kwd
+		smirk = emoji "smirk"
+		response += "I'm Walker! I'm smart #{smirk} and know all of the skills and jobs in the world."
 	# response to what or help
-	elsif str.include? "what"
-		send_sms_to sender, "Do you feel confused #{emoji 'confused'}?"
+	elsif include_keywords body, what_kwd
+		confused = emoji "confused"
+		send_sms_to sender, "Do you feel confused #{confused}?"
 		sleep(2)
 		send_sms_to sender, "There are so many jobs."
 		sleep(2)
@@ -234,31 +247,37 @@ def determine_response body, sender
 		sleep(2)
 		response += "Well, I can help you to find similar job titles and skills to search more jobs!"
 	# response to where
-	elsif str.include? "where"
-		response += "I'm always on the way to help you! #{emoji "laughing"}"
+	elsif include_keywords body, where_kwd
+		laughing = emoji "laughing"
+		response += "I'm always on the way to help you! #{laughing}"
 	# response to when
-	elsif str.include? "when"
+	elsif include_keywords body, when_kwd
 		send_sms_to sender, "I was born in 2020."
 		sleep(2)
-		response += "But my mind is as mature as a 40-year-old #{emoji "pouting_cat_face"}!"
+		pouting_cat_face = emoji "pouting_cat_face"
+		response += "But my mind is as mature as a 40-year-old #{pouting_cat_face}!"
 	# response to why
-	elsif str.include? "why"
-		response += "#{emoji "person_raising_both_hands_in_celebration"}I was made to help you suceed in career shift and job hunting."
+	elsif include_keywords body, why_kwd
+		person_raising_both_hands_in_celebration = emoji "person_raising_both_hands_in_celebration"
+		response += "#{person_raising_both_hands_in_celebration}I was made to help you suceed in career shift and job hunting."
 	# response to joke
-	elsif body == "joke"
+	elsif include_keywords body, joke_kwd
 		array_of_lines = IO.readlines("jokes.txt")
 		response += array_of_lines.sample
 	# response to fact
-	elsif body == "fact"
+	elsif include_keywords body, fact_kwd
 		array_of_lines = IO.readlines("facts.txt")
 		response += array_of_lines.sample + "<br> [ask for 'fact' again to know more.]"
 	# response to haha or lol
-	elsif body == "haha" or body == "lol"
+	elsif include_keywords body, funny_kwd
 		response += $funny_response.sample
 	elsif body == "surprise"
 		response = determine_media_response body
 	else
-		misunderstanding = ["Maybe I know it. But I just don't want to reply.", "Fine. I admit that I don't know this one.", "I know jobs but I am not an encyclopedia..."]
+		face_with_no_good_gesture = emoji "face_with_no_good_gesture"
+		expressionless = emoji "expressionless"
+		dizzy_face = emoji "dizzy_face"
+		misunderstanding = ["Maybe I know it. #{expressionless}But I just don't want to reply.", "Fine.#{dizzy_face} I admit that I don't know this one.", "I know jobs but I am not an #{face_with_no_good_gesture}encyclopedia..."]
 		response += misunderstanding.sample
 	end
 	response
@@ -339,6 +358,8 @@ def general_greeting
 	greeting + " What can I help you?"
 end
 
+
+
 # What problem does Walker solve?
 def problem
 	emoji = emoji "confused"
@@ -353,3 +374,14 @@ def send_sms_to send_to, message
 	   body: message
 	 )
  end
+
+ def include_keywords body, keywords
+	# check if string contains any word in the keywords array
+	keywords.each do |keyword|
+		puts "now checking" + keyword
+		if body.downcase.include?(keyword)
+			return true
+		end
+  end
+	return false
+end
