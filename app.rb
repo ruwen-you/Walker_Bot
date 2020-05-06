@@ -50,7 +50,7 @@ get '/about' do
 	greeting = ""
 	# if no name inputted, general greeting
 	if session[:first_name].nil?
-		greeting += greetings.sample + "<br/>
+		greeting += $greetings.sample + "<br/>
 		I'm your personal bot.<br/>
 		Nice to meet you!"
 	# if has name inputted, greeting with name and number
@@ -210,7 +210,7 @@ error 403 do
 end
 
 
-def determine_response body
+def determine_response body, sender
 	#normalize and clean the string of params
 	body = body.downcase.strip
 
@@ -218,7 +218,9 @@ def determine_response body
 	response = " "
 	# response to hi
 	if body == "hi"
-		response += general_greeting
+		send_sms_to sender, "Hey there! This is Walker!"
+		sleep(1)
+		response += "You can reply help to check what I can do for you."
 	# response to who
 	elsif body == "who"
 		response += "I'm Walker.If you are interested in me, you can learn more by asking me for 'fact'."
@@ -325,7 +327,7 @@ end
 
 # General greeting
 def general_greeting
-	greeting + "What can I help you?"
+	greeting + " What can I help you?"
 end
 
 # What problem does Walker solve?
