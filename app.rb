@@ -217,7 +217,7 @@ def determine_response body
 	response = " "
 	# response to hi
 	if body == "hi"
-		emoji = index.find_by_name('wink')
+		emoji = index.find_by_name('wink')["moji"]
 		response += "Hi! I'm Walker #{emoji}. Do you feel confused when you see so many different names for different jobs and skills? I can help you!"
 	# response to who
 	elsif body == "who"
