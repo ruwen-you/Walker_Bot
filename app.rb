@@ -74,7 +74,7 @@ post "/signup" do
 		#session['first_name'] = params['first_name']
 		#session['number'] = params['number']
 		client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
-		message = "Hi" + params[:first_name] + ", welcome to Walker! I can respond to who, what, where, when and why. If you're stuck, type help."
+		message = "Hi " + params[:first_name] + ", welcome to Walker! I can respond to who, what, where, when and why. If you're stuck, type help."
 		client.api.account.messages.create(
 			from: ENV["TWILIO_FROM"],
 			to: params[:number],
@@ -126,6 +126,8 @@ get "/test/sms" do
 		to: ENV["TEST_NUMBER"],
 		body: message
 	)
+
+
 end
 
 get "/sms/incoming" do
@@ -243,8 +245,7 @@ def determine_response body
 	elsif body == "surprise"
 		response = determine_media_response body
 	else
-		message = "Sorry, your input cannot be understood by the bot."
-		response = send_to_slack message
+		response += "Sorry, your input cannot be understood by Walker."
 	end
 	response
 end
