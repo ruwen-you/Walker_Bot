@@ -258,7 +258,7 @@ def determine_response body, sender
 	elsif body == "surprise"
 		response = determine_media_response body
 	else
-		misunderstanding = ["Maybe I know it. #{emoji "expressionless"}But I just don't want to reply.", "Fine. I admit that I don't know this one.#{emoji "dizzy"}", "I know jobs but I am not an #{emoji "face_with_no_good_gesture"}encyclopedia..."]
+		misunderstanding = ["Maybe I know it. But I just don't want to reply.", "Fine. I admit that I don't know this one.", "I know jobs but I am not an encyclopedia..."]
 		response += misunderstanding.sample
 	end
 	response
