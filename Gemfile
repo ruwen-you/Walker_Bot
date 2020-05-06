@@ -7,7 +7,7 @@ gem 'httparty', '0.18.0'
 gem 'json', '2.3.0'
 gem 'giphy', '3.0.0'
 gem 'faraday', '0.11'
-gem "linkedin-v2", "~> 0.1.0"
+gem "linkedin"
 gem 'careerjet-api-client'
 
 group :development do

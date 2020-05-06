@@ -5,7 +5,7 @@ require 'httparty'
 require 'json'
 require 'giphy'
 require 'faraday'
-require 'linkedin-v2'
+require 'linkedin'
 require "careerjet/api_client"
 
 enable :sessions
@@ -161,14 +161,21 @@ get "/sms/incoming" do
 end
 
 get "/callback" do
-	LinkedIn.configure do |config|
-		config.client_id     = ENV["LINKEDIN_API_KEY"]
-		config.client_secret = ENV["LINKEDIN_API_SECRET"]
-		config.redirect_uri  = "https://fathomless-lake-42472.herokuapp.com/callback"
-	end
+	client = LinkedIn::Client.new(ENV["LINKEDIN_API_KEY"], ENV["LINKEDIN_API_SECRET"])
+	client.authorize_from_access(ENV['LINKEDIN_TOKEN'])
+	linkedin = JSON.parse(client.profile.to_json)
+	puts linkedin
+	"#{linkedin}"
+	#LinkedIn.configure do |config|
+		#config.client_id     = ENV["LINKEDIN_API_KEY"]
+		#config.client_secret = ENV["LINKEDIN_API_SECRET"]
+		#config.redirect_uri  = "https://fathomless-lake-42472.herokuapp.com/callback"
+	#end
 
-	api = LinkedIn::API.new(ENV['LINKEDIN_TOKEN'])
-	me = api.profile
+	#api = LinkedIn::API.new(ENV['LINKEDIN_TOKEN'])
+	#linkedin = JSON.parse(api.profile.to_json)
+  #puts linkedin
+	#{}"#{linkedin}"
 end
 	#api = LinkedIn::API.new(ENV['LINKEDIN_TOKEN'])
 	#me = api.profile
