@@ -28,6 +28,7 @@ end
 $greetings = ["Hello!", "Hi!", "Hey!", "What's up!", "Good to see you!", "Hey there!"]
 $funny_response = ["funny right?", "Glad it makes you laugh!", "It's my pleasure to bring you joy!", "You can ask for 'joke' again and I'll tell you another one.", "I'm funny and attractive, right?"]
 code = "meruinyou"
+$misunderstanding = ["Maybe I know it. #{emoji "expressionless"}But I just don't want to reply.", "Fine. I admit that I don't know this one.#{emoji "dizzy"}", "I know jobs but I am not an #{emoji "face_with_no_good_gesture"}encyclopedia..."]
 
 
 # / page and about page are the same
@@ -220,10 +221,10 @@ def determine_response body, sender
 		sleep(1)
 		response += "You can reply help to check what I can do for you."
 	# response to who
-	elsif body == "who"
-		response += "I'm Walker.If you are interested in me, you can learn more by asking me for 'fact'."
+	elsif str.include? "who"
+		response += "I'm Walker! I'm smart #{emoji 'smirk'} and know all of the skills and jobs in the world."
 	# response to what or help
-	elsif body == "what"
+	elsif str.include? "what"
 		send_sms_to sender, "Do you feel confused #{emoji 'confused'}?"
 		sleep(2)
 		send_sms_to sender, "There are so many jobs."
@@ -234,14 +235,16 @@ def determine_response body, sender
 		sleep(2)
 		response += "Well, I can help you to find similar job titles and skills to search more jobs!"
 	# response to where
-	elsif body == "where"
-		response += "I'm in Pittsburgh."
+	elsif str.include? "where"
+		response += "I'm always on the way to help you! #{emoji "laughing"}"
 	# response to when
-	elsif body == "when"
-		response += "I was made in Spring 2020."
+	elsif str.include? "when"
+		send_sms_to sender, "I was born in 2020."
+		sleep(2)
+		response += "But my mind is as mature as a 40-year-old #{emoji "pouting_cat_face"}!"
 	# response to why
-	elsif body == "why"
-		response += "I was made for a class project in Programming for Online Prototyping."
+	elsif str.include? "why"
+		response += "#{emoji "person_raising_both_hands_in_celebration"}I was made to help you suceed in career shift and job hunting."
 	# response to joke
 	elsif body == "joke"
 		array_of_lines = IO.readlines("jokes.txt")
@@ -256,7 +259,7 @@ def determine_response body, sender
 	elsif body == "surprise"
 		response = determine_media_response body
 	else
-		response += "Sorry, your input cannot be understood by Walker."
+		response += $misunderstanding.sample
 	end
 	response
 end
