@@ -80,7 +80,7 @@ post "/signup" do
 		#session['first_name'] = params['first_name']
 		#session['number'] = params['number']
 		client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
-		message = "#{first_greeting} #{params[:first_name]}. I'm a super funny guy and can help succeed in job hunting. If you want to know more, reply 'what'!"
+		message = "#{first_greeting} #{params[:first_name]}. I'm a super funny guy. I can help you succeed in job hunting. If you want to know more, reply 'what'!"
 		client.api.account.messages.create(
 			from: ENV["TWILIO_FROM"],
 			to: params[:number],
@@ -233,7 +233,8 @@ def determine_response body, sender
 	# response to who
 	elsif include_keywords body, who_kwd
 		smirk = emoji "smirk"
-		response += "I'm Walker! I'm smart #{smirk} and know all of the skills and jobs in the world."
+		response += "I'm Walker! I'm smart #{smirk} and know
+		all of the skills and jobs in the world."
 	# response to what or help
 	elsif include_keywords body, what_kwd
 		confused = emoji "confused"
@@ -245,7 +246,9 @@ def determine_response body, sender
 		sleep(2)
 		send_sms_to sender, "Then how can you know what title to search?"
 		sleep(2)
-		response += "Well, I can help you to find similar job titles and skills to search more jobs!"
+		send_sms_to sender, "Well, I can help you to find similar job titles and skills to search more jobs!"
+		sleep(2)
+		response += "Are you ready to "
 	# response to where
 	elsif include_keywords body, where_kwd
 		laughing = emoji "laughing"
