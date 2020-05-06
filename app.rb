@@ -141,7 +141,7 @@ get "/sms/incoming" do
 
 	sender = params[:From] || ""
 	body = params[:Body] || ""
-	message = determine_response body
+	message = determine_response body, sender
 	media = nil
 
 	#if session[:counter] == 0
@@ -339,7 +339,7 @@ end
 def send_sms_to send_to, message
 	 client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
 	 client.api.account.messages.create(
-	   from: ENV["TWILIO_FROM"],
+		 from: ENV["TWILIO_FROM"],
 	   to: send_to,
 	   body: message
 	 )
