@@ -25,7 +25,7 @@ configure :development do
 end
 
 # global variables
-greetings = ["Hello!", "Hi!", "Hey!", "What's up!", "Good to see you!", "Hey there!"]
+$greetings = ["Hello!", "Hi!", "Hey!", "What's up!", "Good to see you!", "Hey there!"]
 $funny_response = ["funny right?", "Glad it makes you laugh!", "It's my pleasure to bring you joy!", "You can ask for 'joke' again and I'll tell you another one.", "I'm funny and attractive, right?"]
 code = "meruinyou"
 
@@ -210,7 +210,7 @@ error 403 do
 end
 
 
-def determine_response body
+def determine_response body, sender
 	#normalize and clean the string of params
 	body = body.downcase.strip
 
@@ -221,7 +221,9 @@ def determine_response body
 		response += general_greeting
 	# response to who
 	elsif body == "who"
-		response += "I'm a MeBot.If you are interested in me, you can learn more by asking me for 'fact'."
+		send_sms_to sender, "I'm Walker."
+		sleep(1)
+		response += "#{problem}"
 	# response to what or help
 	elsif body == "what" || body == "help"
 		response += problem
@@ -308,13 +310,13 @@ end
 #find an Emoji
 def emoji feeling
 	index = Emoji::Index.new
-	index.find_by_name(feeling)
+	index.find_by_name(feeling)['moji']
 end
 
 
 # choose a random greeting from greetings array
 def greeting
-	greetings.sample
+	$greetings.sample
 end
 
 # First Time Introduction to Walker
@@ -341,4 +343,4 @@ def send_sms_to send_to, message
 	   to: send_to,
 	   body: message
 	 )
- end
+end
