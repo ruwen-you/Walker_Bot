@@ -28,7 +28,6 @@ end
 $greetings = ["Hello!", "Hi!", "Hey!", "What's up!", "Good to see you!", "Hey there!"]
 $funny_response = ["funny right?", "Glad it makes you laugh!", "It's my pleasure to bring you joy!", "You can ask for 'joke' again and I'll tell you another one.", "I'm funny and attractive, right?"]
 code = "meruinyou"
-$misunderstanding = ["Maybe I know it. #{emoji "expressionless"}But I just don't want to reply.", "Fine. I admit that I don't know this one.#{emoji "dizzy"}", "I know jobs but I am not an #{emoji "face_with_no_good_gesture"}encyclopedia..."]
 
 
 # / page and about page are the same
@@ -259,7 +258,8 @@ def determine_response body, sender
 	elsif body == "surprise"
 		response = determine_media_response body
 	else
-		response += $misunderstanding.sample
+		misunderstanding = ["Maybe I know it. #{emoji "expressionless"}But I just don't want to reply.", "Fine. I admit that I don't know this one.#{emoji "dizzy"}", "I know jobs but I am not an #{emoji "face_with_no_good_gesture"}encyclopedia..."]
+		response += misunderstanding.sample
 	end
 	response
 end
