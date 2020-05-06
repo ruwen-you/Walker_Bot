@@ -198,7 +198,7 @@ def determine_media_response body
 	unless giphy_search.nil?
 		results = Giphy.search( giphy_search, { limit: 25 } )
 		unless results.empty?
-			gif = results.sample.image_original.url.to_s
+			gif = results.sample.fixed_width_downsampled_image.url.to_s
 			return gif
 		end
 	end
@@ -225,7 +225,7 @@ def determine_response body, sender
 	elsif body == "who"
 		response += "I'm Walker.If you are interested in me, you can learn more by asking me for 'fact'."
 	# response to what or help
-	elsif body == "what" || body == "help"
+	elsif body == "what" || body == "problem"
 		response += problem
 	# response to where
 	elsif body == "where"
