@@ -218,7 +218,7 @@ def determine_response body, sender
 	response = " "
 	# response to hi
 	if body == "hi"
-		send_sms_to sender, "Hey there! This is Walker!"
+		response += "hi"
 
 	# response to who
 	elsif body == "who"
