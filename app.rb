@@ -226,13 +226,11 @@ def determine_response body, sender
 	elsif body == "what"
 		send_sms_to sender, "Do you feel confused #{emoji 'confused'}?"
 		sleep(2)
-		send_sms_to sender, "When you are looking for jobs as a Cupcake Ninja, you can't find many."
+		send_sms_to sender, "There are so many jobs."
 		sleep(2)
-		send_sms_to sender, "But when you use 'Baker' to search the jobs, you can find a lot!"
+		send_sms_to sender, "They require the same skills but have different titles!"
 		sleep(2)
-		send_sms_to sender, "Actually, they are the similar jobs requiring the same skills."
-		sleep(2)
-		send_sms_to sender, "Then how can you know what to search?"
+		send_sms_to sender, "Then how can you what title to search?"
 		sleep(2)
 		response += "Well, I can help you to find similar job titles and skills to search more jobs!"
 	# response to where
