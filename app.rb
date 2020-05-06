@@ -138,6 +138,7 @@ end
 
 get "/sms/incoming" do
 	session[:counter] ||= 0
+	session["last_intent"] ||= nil
 
 	sender = params[:From] || ""
 	body = params[:Body] || ""
@@ -234,7 +235,7 @@ def determine_response body, sender
 	elsif include_keywords body, who_kwd
 		smirk = emoji "smirk"
 		response += "I'm Walker! I'm smart #{smirk} and know
-	all of the skills and jobs in the world."
+all of the skills and jobs in the world."
 	# response to what or help
 	elsif include_keywords body, what_kwd
 		confused = emoji "confused"
@@ -276,6 +277,12 @@ def determine_response body, sender
 		response += $funny_response.sample
 	elsif body == "surprise"
 		response = determine_media_response body
+	elsif body == "job"
+		session["last_intent"] = "ask_job"
+		response += "What job are you interested in?"
+	elsif session["last_intent"] == "ask_job"
+		response += "Here are some similar jobs.
+Don't forget to searh them!"
 	else
 		face_with_no_good_gesture = emoji "face_with_no_good_gesture"
 		expressionless = emoji "expressionless"
@@ -318,9 +325,18 @@ end
 
 
 get "/test/jobs-skills" do
-	id = HTTParty.get("http://api.dataatwork.org/v1/jobs/normalize?job_title='software'")[0]["uuid"]
-	associate = HTTParty.get("http://api.dataatwork.org/v1/jobs/#{id}/related_jobs")
-	puts associate
+	id = HTTParty.get("http://api.dataatwork.org/v1/jobs/normalize?job_title='teacher'")[0]['uuid']
+	related_jobs = HTTParty.get("http://api.dataatwork.org/v1/jobs/#{id}/related_jobs")["related_job_titles"]
+	jobs = []
+	#puts related_jobs
+	puts related_jobs[1]
+	#puts related_jobs["related_job_titles"][0]['title']
+	#related_jobs.each do |related_job|
+		#title = related_job['title']
+		#puts title
+	#end
+	#new = id.first[0]
+	#[0]["uuid"]
 end
 
 get "/test/muse" do
@@ -381,7 +397,6 @@ def send_sms_to send_to, message
  def include_keywords body, keywords
 	# check if string contains any word in the keywords array
 	keywords.each do |keyword|
-		puts "now checking" + keyword
 		if body.downcase.include?(keyword)
 			return true
 		end
