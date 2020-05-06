@@ -218,8 +218,9 @@ def determine_response body, sender
 	response = " "
 	# response to hi
 	if body == "hi"
-		response += "hi"
-
+		send_sms_to sender, general_greeting
+		sleep(1)
+		response += "You can reply help to check what I can do for you."
 	# response to who
 	elsif body == "who"
 		response += "I'm Walker.If you are interested in me, you can learn more by asking me for 'fact'."
