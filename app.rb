@@ -29,6 +29,7 @@ greetings = ["Hello!", "Hi!", "Hey!", "What's up!", "Good to see you!", "Hey the
 $funny_response = ["funny right?", "Glad it makes you laugh!", "It's my pleasure to bring you joy!", "You can ask for 'joke' again and I'll tell you another one.", "I'm funny and attractive, right?"]
 code = "meruinyou"
 
+
 # / page and about page are the same
 get "/" do
 	redirect "/about"
@@ -79,7 +80,8 @@ post "/signup" do
 		#session['first_name'] = params['first_name']
 		#session['number'] = params['number']
 		client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
-		message = "Hi " + params[:first_name] + ", welcome to Walker! I can respond to who, what, where, when and why. If you're stuck, type help."
+		message = "#{first_greeting} #{params[:first_name]}. You can reply 'what' to know more about me."
+
 		client.api.account.messages.create(
 			from: ENV["TWILIO_FROM"],
 			to: params[:number],
@@ -120,20 +122,6 @@ get '/html' do
 	erb :"signup"
 end
 
-get "/test/sms" do
-	client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
-
-	message = "This is Ruwen's first chatbot."
-
-	# This will send a message from any end point
-	client.api.account.messages.create(
-		from: ENV["TWILIO_FROM"],
-		to: ENV["TEST_NUMBER"],
-		body: message
-	)
-
-
-end
 
 get "/sms/incoming" do
 	session[:counter] ||= 0
@@ -209,22 +197,23 @@ error 403 do
 end
 
 
-def determine_response body
+def determine_response body, sender
 	#normalize and clean the string of params
 	body = body.downcase.strip
-	index = Emoji::Index.new
+
 	#responses
-	response = " "
+	response = ""
 	# response to hi
 	if body == "hi"
-		emoji = index.find_by_name('wink')["moji"]
-		response += "Hi! I'm Walker #{emoji}. Do you feel confused when you see so many different names for different jobs and skills? I can help you!"
+		response += general_greeting
 	# response to who
 	elsif body == "who"
 		response += "I'm a MeBot.If you are interested in me, you can learn more by asking me for 'fact'."
 	# response to what or help
 	elsif body == "what" || body == "help"
-		response += "I can be used to ask basic things about you."
+		send_sms_to sender, problem
+		sleep(1)
+		response += "Now you can blabla."
 	# response to where
 	elsif body == "where"
 		response += "I'm in Pittsburgh."
@@ -295,11 +284,6 @@ get "/test/muse" do
 	response
 end
 
-get "/test/emoji" do
-	index = Emoji::Index.new
-	emoji = index.find_by_name('smiley_sleeping')
-	"#{emoji}"
-end
 
 get "/test/sentiment" do
 	analyzer = Sentimental.new
@@ -308,3 +292,42 @@ get "/test/sentiment" do
 	puts result
 	"#{result}"
 end
+
+
+#find an Emoji
+def emoji feeling
+	index = Emoji::Index.new
+	index.find_by_name(feeling)
+end
+
+
+# choose a random greeting from greetings array
+def greeting
+	greetings.sample
+end
+
+# First Time Introduction to Walker
+def first_greeting
+	emoji = emoji 'wink'
+	greeting + " I'm Walker #{emoji}"
+end
+
+# General greeting
+def general_greeting
+	greeting + "What can I help you?"
+end
+
+# What problem does Walker solve?
+def problem
+	emoji = emoji "confused"
+	"Do you feel confused #{emoji} when there are so many different names for one job or one skill and you don't know how to find a right name to search a job? I can help you with it!"
+end
+
+def send_sms_to send_to, message
+	 client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
+	 client.api.account.messages.create(
+	   from: ENV["TWILIO_FROM"],
+	   to: send_to,
+	   body: message
+	 )
+ end
