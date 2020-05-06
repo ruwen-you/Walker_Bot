@@ -234,7 +234,7 @@ def determine_response body, sender
 	elsif include_keywords body, who_kwd
 		smirk = emoji "smirk"
 		response += "I'm Walker! I'm smart #{smirk} and know
-		all of the skills and jobs in the world."
+	all of the skills and jobs in the world."
 	# response to what or help
 	elsif include_keywords body, what_kwd
 		confused = emoji "confused"
@@ -248,7 +248,7 @@ def determine_response body, sender
 		sleep(2)
 		send_sms_to sender, "Well, I can help you to find similar job titles and skills to search more jobs!"
 		sleep(2)
-		response += "Are you ready to "
+		response += "Reply 'help' when you are ready to start new journey!"
 	# response to where
 	elsif include_keywords body, where_kwd
 		laughing = emoji "laughing"
