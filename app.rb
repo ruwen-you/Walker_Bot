@@ -223,8 +223,18 @@ def determine_response body, sender
 	elsif body == "who"
 		response += "I'm Walker.If you are interested in me, you can learn more by asking me for 'fact'."
 	# response to what or help
-	elsif body == "what" || body == "problem"
-		response += problem
+	elsif body == "what"
+		send_sms_to sender, "Do you feel confused #{emoji 'confused'}?"
+		sleep(2)
+		send_sms_to sender, "When you are looking for jobs as a Cupcake Ninja, you can't find many."
+		sleep(4)
+		send_sms_to sender, "But when you use 'Baker' to search the jobs, you can find a lot!"
+		sleep(6)
+		send_sms_to sender, "Actually, they are the similar jobs requiring the same skills."
+		sleep(8)
+		send_sms_to sender, "Then how can you know what to search?"
+		sleep(10)
+		response += "Well, I can help you to find similar job titles and skills to search more jobs!"
 	# response to where
 	elsif body == "where"
 		response += "I'm in Pittsburgh."
