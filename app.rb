@@ -256,6 +256,7 @@ I quit my job working for Nike. Just couldn’t do it anymore."
 		else
 			send_sms_to sender, "Glad to hear it! I think I definitely contributed a lot."
 			response += "But it doesn't mean you can relax. Keep moving and reply 'start' to me!!!"
+		end
 	elsif include_keywords body, who_kwd
 		smirk = emoji "smirk"
 		response += "I'm Walker! I'm smart #{smirk} and know
