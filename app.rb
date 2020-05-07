@@ -367,7 +367,7 @@ get "/test/deckofcards/randomcard" do
 end
 
 get "/test/jobs-skills" do
-	skills_jobs "programming"
+	skills_jobs "biking"
 end
 
 def related_jobs body
