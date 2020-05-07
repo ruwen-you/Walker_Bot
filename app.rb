@@ -281,16 +281,29 @@ all of the skills and jobs in the world."
 		session["last_intent"] = "ask_job"
 		response += "What job are you interested in?"
 	elsif session["last_intent"] == "ask_job"
+		session[""]
 		session["last_intent"] = "related_job"
 		related_jobs = related_jobs body
 		send_sms_to sender, "Here are some similar jobs:
 #{related_jobs}"
 		sleep (3)
 		send_sms_to sender, "Don't forget to searh them! They all require similar skills!"
-		response += "Reply 'skill' to check these skills.
-Or reply 'job' to search other jobs.
+		sleep (3)
+		response += "Reply 'job' to search other jobs.
 Or reply 'help' to see what others you can do."
 	#elsif session["last_session"] == "related_job" && body == "skill"
+	elsif body == "skill"
+		session["last_intent"] = "ask_skill"
+		response += "Tell me one skill you have~"
+	elsif session["last_intent"] == 'related_skill'
+		related_skills = related_skills body
+		send_sms_to sender, "Here are some similar skills:
+#{related_skills}"
+		sleep (3)
+		send_sms_to sender, "See! You already have all the skills above! You can get jobs which require them."
+		sleep (3)
+		response += "Reply 'skill' to search other skills.
+Or reply 'help' to see what others you can do."
 
 	else
 		face_with_no_good_gesture = emoji "face_with_no_good_gesture"
@@ -333,7 +346,7 @@ get "/test/deckofcards/randomcard" do
 end
 
 get "/test/jobs-skills" do
-	related_jobs "teacher"
+	related_skills "ruby"
 end
 
 def related_jobs body
@@ -345,16 +358,29 @@ def related_jobs body
 	#puts related_jobs["related_job_titles"][0]['title']
 	related_jobs.each do |related_job|
 		title = related_job['title']
-		jobs = jobs+title+', '
+		jobs = jobs + title + ', '
 	end
 	"#{jobs[0...-2]}"
 	#new = id.first[0]
 	#[0]["uuid"]
 end
 
+def related_skills body
+	id = HTTParty.get("http://api.dataatwork.org/v1/skills/normalize?skill_name=#{body}")[0]['uuid']
+	related_skills = HTTParty.get("http://api.dataatwork.org/v1/skills/#{id}/related_skills")["skills"]
+	skills = ""
+	related_skills.each do |related_skill|
+		skill_name = related_skill['skill_name']
+		skills = skills + skill_name + ', '
+	end
+	"#{skills[0...-2]}"
+end
+
 get "/test/muse" do
 	response = HTTParty.get("https://www.themuse.com/api/public/jobs?level=Entry%20Level&page=1")["results"][0]["name"]
-	response
+
+	#new = id.first[0]
+	#[0]["uuid"]
 end
 
 
