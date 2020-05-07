@@ -281,8 +281,17 @@ all of the skills and jobs in the world."
 		session["last_intent"] = "ask_job"
 		response += "What job are you interested in?"
 	elsif session["last_intent"] == "ask_job"
-		response += "Here are some similar jobs.
-Don't forget to searh them!"
+		session["last_intent"] = "related_job"
+		related_jobs = related_jobs body
+		send_sms_to sender, "Here are some similar jobs:
+#{related_jobs}"
+		sleep (3)
+		send_sms_to sender, "Don't forget to searh them! They all require similar skills!"
+		response += "Reply 'skill' to check these skills.
+Or reply 'job' to search other jobs.
+Or reply 'help' to see what others you can do."
+	#elsif session["last_session"] == "related_job" && body == "skill"
+
 	else
 		face_with_no_good_gesture = emoji "face_with_no_good_gesture"
 		expressionless = emoji "expressionless"
@@ -323,18 +332,22 @@ get "/test/deckofcards/randomcard" do
 	response_str
 end
 
-
 get "/test/jobs-skills" do
-	id = HTTParty.get("http://api.dataatwork.org/v1/jobs/normalize?job_title='teacher'")[0]['uuid']
+	related_jobs "teacher"
+end
+
+def related_jobs body
+	id = HTTParty.get("http://api.dataatwork.org/v1/jobs/normalize?job_title=#{body}")[0]['uuid']
 	related_jobs = HTTParty.get("http://api.dataatwork.org/v1/jobs/#{id}/related_jobs")["related_job_titles"]
-	jobs = []
+	jobs = ""
 	#puts related_jobs
-	puts related_jobs[1]
+	#puts related_jobs[1]
 	#puts related_jobs["related_job_titles"][0]['title']
-	#related_jobs.each do |related_job|
-		#title = related_job['title']
-		#puts title
-	#end
+	related_jobs.each do |related_job|
+		title = related_job['title']
+		jobs = jobs+title+', '
+	end
+	"#{jobs[0...-2]}"
 	#new = id.first[0]
 	#[0]["uuid"]
 end
