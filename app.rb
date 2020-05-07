@@ -42,7 +42,7 @@ get '/about' do
   session["visits"] = session["visits"] + 1  # adds one to the current value (increments)
 	visit_num = "You have visited #{session["visits"].to_s} timesß as of "
 	# app description with functionality
-	app_description = "My app helps you find more jobs."
+	app_description = "My app helps you find jobs."
 	# current visiting time
 	time = Time.now
 	time_str = time.strftime("%A %B %d, %Y %H:%M")
