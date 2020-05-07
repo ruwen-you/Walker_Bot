@@ -232,6 +232,30 @@ def determine_response body, sender
 		sleep(1)
 		response += "You can reply 'start' to check what I can do for you."
 	# response to who
+	elsif body == "start"
+		response += "I'm amazing! Try replying the following secret code:
+'job': find all the jobs related to one job
+'skill': find all the skills related to one skill
+'else': know more about me - the most awesome guy in the world!
+'talk': Never choose this one!"
+	elsif body == "else"
+		response += "I know you like me! Try 'what', 'where', 'when', 'why' and I'll surprise you!"
+	elsif body == 'talk'
+		session ['last_intent'] = 'talk_job'
+		send_sms_to sender, "I already told you never chose this one!"
+		send_sms_to sender, "Then you have to bear the consequences..."
+		send_sms_to sender, "I have to ask you a serious but awful question."
+		response += "How is your job hunting now?"
+	elsif session['last_intent'] == 'talk_job'
+		feeling = sentiment body
+		if feeling < 0
+			send_sms_to sender, "Although I'm sorry to hear that, you have to cheer up!"
+			sleep (2)
+			response += "Here is a joke:
+I quit my job working for Nike. Just couldn’t do it anymore."
+		else
+			send_sms_to sender, "Glad to hear it! I think I definitely contributed a lot."
+			response += "But it doesn't mean you can relax. Keep moving and reply 'start' to me!!!"
 	elsif include_keywords body, who_kwd
 		smirk = emoji "smirk"
 		response += "I'm Walker! I'm smart #{smirk} and know
@@ -274,7 +298,9 @@ all of the skills and jobs in the world."
 		response += array_of_lines.sample + "<br> [ask for 'fact' again to know more.]"
 	# response to haha or lol
 	elsif include_keywords body, funny_kwd
-		response += $funny_response.sample
+		response += "#{$funny_response.sample}
+Now reply 'start' to me.
+Next time I'll tell you a funnier joke!"
 	elsif body == "surprise"
 		response = determine_media_response body
 	elsif body == "job"
@@ -391,12 +417,11 @@ def skills_jobs body
 end
 
 
-get "/test/sentiment" do
+def sentiment body
 	analyzer = Sentimental.new
 	analyzer.load_defaults
-	result = analyzer.sentiment "I didn't get the job"
-	puts result
-	"#{result}"
+	result = analyzer.sentiment body
+	return result
 end
 
 
