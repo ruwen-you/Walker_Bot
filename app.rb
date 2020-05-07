@@ -288,7 +288,7 @@ all of the skills and jobs in the world."
 		send_sms_to sender, "Don't forget to searh them! They all require similar skills!"
 		sleep (3)
 		response += "Reply 'job' to search other jobs.
-Or reply 'help' to see what others you can do."
+Or reply 'start' to see what others you can do."
 	#elsif session["last_session"] == "related_job" && body == "skill"
 	elsif body == "skill"
 		session["last_intent"] = "ask_skill"
@@ -301,8 +301,31 @@ Or reply 'help' to see what others you can do."
 		send_sms_to sender, "See! You already have all the skills above! You can get jobs which require them."
 		sleep (3)
 		response += "Reply 'skill' to search other skills.
-Or reply 'help' to see what others you can do."
-
+Or reply 'start' to see what others you can do."
+	elsif body == "skilljob"
+		session["last_intent"] = "ask_skilljob"
+		response += "Tell me one skill you have~"
+	elsif session["last_intent"] = "ask_skilljob"
+		related_jobs = skills_jobs body
+		send_sms_to sender, "Here are some jobs related to the skill:
+#{related_jobs}"
+		sleep (3)
+		send_sms_to sender, "You can apply for the jobs above since you already have the skill required!"
+		sleep (3)
+		response += "Reply 'skilljob' to continue.
+Or reply 'start' to see what others you can do."
+	elsif body == "jobskill"
+		session["last_intent"] = "ask_jobskill"
+		response += "What job are you interested in?"
+	elsif session["last_intent"] = "ask_jobskill"
+		related_skills = jobs_skills body
+		send_sms_to sender, "Here are some skills related to the job:
+#{related_skills}"
+		sleep (3)
+		send_sms_to sender, "You can check what are the skills you don't have for the job and try to improve them!"
+		sleep (3)
+		response += "Reply 'jobskill' to continue.
+Or reply 'start' to see what others you can do."
 	else
 		face_with_no_good_gesture = emoji "face_with_no_good_gesture"
 		expressionless = emoji "expressionless"
@@ -344,23 +367,18 @@ get "/test/deckofcards/randomcard" do
 end
 
 get "/test/jobs-skills" do
-	related_skills "ruby"
+	skills_jobs "programming"
 end
 
 def related_jobs body
 	id = HTTParty.get("http://api.dataatwork.org/v1/jobs/normalize?job_title=#{body}")[0]['uuid']
 	related_jobs = HTTParty.get("http://api.dataatwork.org/v1/jobs/#{id}/related_jobs")["related_job_titles"]
 	jobs = ""
-	#puts related_jobs
-	#puts related_jobs[1]
-	#puts related_jobs["related_job_titles"][0]['title']
 	related_jobs.each do |related_job|
 		title = related_job['title']
 		jobs = jobs + title + ', '
 	end
 	"#{jobs[0...-2]}"
-	#new = id.first[0]
-	#[0]["uuid"]
 end
 
 def related_skills body
@@ -374,11 +392,28 @@ def related_skills body
 	"#{skills[0...-2]}"
 end
 
-get "/test/muse" do
-	response = HTTParty.get("https://www.themuse.com/api/public/jobs?level=Entry%20Level&page=1")["results"][0]["name"]
+def jobs_skills body
+	id = HTTParty.get("http://api.dataatwork.org/v1/jobs/normalize?job_title=#{body}")[0]['uuid']
+	related_skills = HTTParty.get("http://api.dataatwork.org/v1/jobs/#{id}/related_skills")["skills"]
+	skills = ""
+	puts related_skills
+	related_skills.each do |related_skill|
+		skill_name = related_skill['skill_name']
+		skills = skills + skill_name + ', '
+	end
+	"#{skills[0...-2]}"
+end
 
-	#new = id.first[0]
-	#[0]["uuid"]
+def skills_jobs body
+	id = HTTParty.get("http://api.dataatwork.org/v1/skills/normalize?skill_name=#{body}")[0]['uuid']
+	related_jobs = HTTParty.get("http://api.dataatwork.org/v1/skills/#{id}/related_jobs")["jobs"]
+	jobs = ""
+	puts related_jobs
+	related_jobs.each do |related_job|
+		title = related_job['job_title']
+		jobs = jobs + title + ', '
+	end
+	"#{jobs[0...-2]}"
 end
 
 
