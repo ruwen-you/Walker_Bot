@@ -230,7 +230,7 @@ def determine_response body, sender
 	if include_keywords body, greeting_kwd
 		send_sms_to sender, general_greeting
 		sleep(1)
-		response += "You can reply help to check what I can do for you."
+		response += "You can reply 'start' to check what I can do for you."
 	# response to who
 	elsif include_keywords body, who_kwd
 		smirk = emoji "smirk"
@@ -249,7 +249,7 @@ all of the skills and jobs in the world."
 		sleep(2)
 		send_sms_to sender, "Well, I can help you to find similar job titles and skills to search more jobs!"
 		sleep(2)
-		response += "Reply 'help' when you are ready to start new journey!"
+		response += "Reply 'start' when you are ready to start new journey!"
 	# response to where
 	elsif include_keywords body, where_kwd
 		laughing = emoji "laughing"
@@ -367,7 +367,7 @@ get "/test/deckofcards/randomcard" do
 end
 
 get "/test/jobs-skills" do
-	skills_jobs "biking"
+	related_skills "programming"
 end
 
 def related_jobs body
@@ -396,7 +396,6 @@ def jobs_skills body
 	id = HTTParty.get("http://api.dataatwork.org/v1/jobs/normalize?job_title=#{body}")[0]['uuid']
 	related_skills = HTTParty.get("http://api.dataatwork.org/v1/jobs/#{id}/related_skills")["skills"]
 	skills = ""
-	puts related_skills
 	related_skills.each do |related_skill|
 		skill_name = related_skill['skill_name']
 		skills = skills + skill_name + ', '
@@ -408,7 +407,6 @@ def skills_jobs body
 	id = HTTParty.get("http://api.dataatwork.org/v1/skills/normalize?skill_name=#{body}")[0]['uuid']
 	related_jobs = HTTParty.get("http://api.dataatwork.org/v1/skills/#{id}/related_jobs")["jobs"]
 	jobs = ""
-	puts related_jobs
 	related_jobs.each do |related_job|
 		title = related_job['job_title']
 		jobs = jobs + title + ', '
