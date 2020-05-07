@@ -125,7 +125,7 @@ end
 get "/test/sms" do
 	client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
 
-	message = "This is Ruwen's first chatbot."
+	message = "This is Ruwen first chatbot."
 
 	# This will send a message from any end point
 	client.api.account.messages.create(
