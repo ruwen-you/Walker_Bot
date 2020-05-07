@@ -281,8 +281,6 @@ all of the skills and jobs in the world."
 		session["last_intent"] = "ask_job"
 		response += "What job are you interested in?"
 	elsif session["last_intent"] == "ask_job"
-		session[""]
-		session["last_intent"] = "related_job"
 		related_jobs = related_jobs body
 		send_sms_to sender, "Here are some similar jobs:
 #{related_jobs}"
@@ -295,7 +293,7 @@ Or reply 'help' to see what others you can do."
 	elsif body == "skill"
 		session["last_intent"] = "ask_skill"
 		response += "Tell me one skill you have~"
-	elsif session["last_intent"] == 'related_skill'
+	elsif session["last_intent"] == 'ask_skill'
 		related_skills = related_skills body
 		send_sms_to sender, "Here are some similar skills:
 #{related_skills}"
