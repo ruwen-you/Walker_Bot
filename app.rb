@@ -302,30 +302,6 @@ Or reply 'start' to see what others you can do."
 		sleep (3)
 		response += "Reply 'skill' to search other skills.
 Or reply 'start' to see what others you can do."
-	elsif body == "skilljob"
-		session["last_intent"] = "ask_skilljob"
-		response += "Tell me one skill you have~"
-	elsif session["last_intent"] = "ask_skilljob"
-		related_jobs = skills_jobs body
-		send_sms_to sender, "Here are some jobs related to the skill:
-#{related_jobs}"
-		sleep (3)
-		send_sms_to sender, "You can apply for the jobs above since you already have the skill required!"
-		sleep (3)
-		response += "Reply 'skilljob' to continue.
-Or reply 'start' to see what others you can do."
-	elsif body == "jobskill"
-		session["last_intent"] = "ask_jobskill"
-		response += "What job are you interested in?"
-	elsif session["last_intent"] = "ask_jobskill"
-		related_skills = jobs_skills body
-		send_sms_to sender, "Here are some skills related to the job:
-#{related_skills}"
-		sleep (3)
-		send_sms_to sender, "You can check what are the skills you don't have for the job and try to improve them!"
-		sleep (3)
-		response += "Reply 'jobskill' to continue.
-Or reply 'start' to see what others you can do."
 	else
 		face_with_no_good_gesture = emoji "face_with_no_good_gesture"
 		expressionless = emoji "expressionless"
