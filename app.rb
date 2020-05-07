@@ -80,7 +80,8 @@ post "/signup" do
 		#session['first_name'] = params['first_name']
 		#session['number'] = params['number']
 		client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
-		message = "#{first_greeting} #{params[:first_name]}. I'm a super funny guy. I can help you succeed in job hunting. If you want to know more, reply 'what'!"
+		message = "🥳#{first_greeting} #{params[:first_name]}. I'm a super funny guy.💩
+I can help you succeed in job hunting. If you want to know more, reply 'what'!👀"
 		client.api.account.messages.create(
 			from: ENV["TWILIO_FROM"],
 			to: params[:number],
@@ -230,35 +231,35 @@ def determine_response body, sender
 	if include_keywords body, greeting_kwd
 		send_sms_to sender, general_greeting
 		sleep(1)
-		response += "You can reply 'start' to check what I can do for you."
+		response += "You can reply 'start' to check what I can do for you.☺️"
 	# response to who
 	elsif body == "start"
-		response += "I'm amazing! Try replying the following secret code:
-'job': find all the jobs related to one job
-'skill': find all the skills related to one skill
-'else': know more about me - the most awesome guy in the world!
-'talk': Never choose this one!"
+		response += "I'm amazing!😎 Try replying the following secret code:
+🐙'job': find all the jobs related to one job
+🦐'skill': find all the skills related to one skill
+🦞'else': know more about me - the most awesome guy in the world!
+🐡'talk': Never choose this one!"
 	elsif body == "else"
-		response += "I know you like me! Try 'what', 'where', 'when', 'why' and I'll surprise you!"
+		response += "I know you like me!❤️ Try 'what', 'where', 'when', 'why' and I'll surprise you!"
 	elsif body == 'talk'
 
-		send_sms_to sender, "I already told you never chose this one!"
+		send_sms_to sender, "🙅🏼‍♀️I already told you never choose this one..."
 		sleep(2)
-		send_sms_to sender, "Then you have to bear the consequences..."
+		send_sms_to sender, "Then you have to bear the consequences...🤷🏻‍♂️"
 		sleep(2)
-		send_sms_to sender, "I have to ask you a serious but awful question."
+		send_sms_to sender, "I have to ask you a serious🙂 but awful🙃 question."
 		sleep(2)
 		#session ["last_intent"] = "talk_job"
 		response += "How is your job hunting now?"
 	elsif body == "bad"
-		send_sms_to sender, "Although I'm sorry to hear that, you have to cheer up!"
+		send_sms_to sender, "Although I'm sorry to hear that😫, you have to cheer up!"
 		sleep (2)
 		response += "Here is a joke:
-#I quit my job working for Nike. Just couldn’t do it anymore."
+#I quit my job working for Nike. Just couldn’t do it anymore.🤣"
 	elsif body == "good"
-		send_sms_to sender, "Glad to hear it! I think I definitely contributed a lot."
+		send_sms_to sender, "Glad to hear it! I think I definitely contributed a lot.😎"
 		sleep (2)
-		response += "But it doesn't mean you can relax. Keep moving and reply 'start' to me!!!"
+		response += "But it doesn't mean you can relax. Keep moving🏃‍♀️ and reply 'start' to me!!!"
 	#elsif session['last_intent'] == 'talk_job'
 		#feeling = sentiment body
 		#if feeling < 0
@@ -315,31 +316,31 @@ all of the skills and jobs in the world."
 	elsif include_keywords body, funny_kwd
 		response += "#{$funny_response.sample}
 Now reply 'start' to me.
-Next time I'll tell you a funnier joke!"
+🙈Next time I'll tell you a funnier joke!"
 	elsif body == "surprise"
 		response = determine_media_response body
 	elsif body == "job"
 		session["last_intent"] = "ask_job"
-		response += "What job are you interested in?"
+		response += "What job are you interested in?🤟"
 	elsif session["last_intent"] == "ask_job"
 		related_jobs = related_jobs body
 		send_sms_to sender, "Here are some similar jobs:
 #{related_jobs}"
 		sleep (3)
-		send_sms_to sender, "Don't forget to searh them! They all require similar skills!"
+		send_sms_to sender, "Don't forget to searh them!🤖 They all require similar skills!"
 		sleep (3)
 		response += "Reply 'job' to search other jobs.
 Or reply 'start' to see what others you can do."
 	#elsif session["last_session"] == "related_job" && body == "skill"
 	elsif body == "skill"
 		session["last_intent"] = "ask_skill"
-		response += "Tell me one skill you have~"
+		response += "Tell me one skill you have~😘"
 	elsif session["last_intent"] == "ask_skill"
 		related_skills = related_skills body
 		send_sms_to sender, "Here are some similar skills:
 #{related_skills}"
 		sleep (3)
-		send_sms_to sender, "See! You already have all the skills above! You can get jobs which require them."
+		send_sms_to sender, "See! ✌️You already have all the skills above! You can get jobs which require them."
 		sleep (3)
 		response += "Reply 'skill' to search other skills.
 Or reply 'start' to see what others you can do."
