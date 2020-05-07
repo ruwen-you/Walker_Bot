@@ -250,7 +250,7 @@ def determine_response body, sender
 		sleep(2)
 		#session ["last_intent"] = "talk_job"
 		response += "How is your job hunting now?"
-	elsif body == "I didn't get a job"
+	elsif body == "bad"
 		send_sms_to sender, "Although I'm sorry to hear that, you have to cheer up!"
 		sleep (2)
 		response += "Here is a joke:
@@ -348,7 +348,8 @@ Or reply 'start' to see what others you can do."
 		expressionless = emoji "expressionless"
 		dizzy_face = emoji "dizzy_face"
 		misunderstanding = ["Maybe I know it. #{expressionless}But I just don't want to reply.", "Fine.#{dizzy_face} I admit that I don't know this one.", "I know jobs but I am not an #{face_with_no_good_gesture}encyclopedia..."]
-		response += misunderstanding.sample
+		response += "#{misunderstanding.sample}
+Reply 'start' to me, then I can talk with you."
 	end
 	response
 end
