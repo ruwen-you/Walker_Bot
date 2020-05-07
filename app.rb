@@ -241,22 +241,36 @@ def determine_response body, sender
 	elsif body == "else"
 		response += "I know you like me! Try 'what', 'where', 'when', 'why' and I'll surprise you!"
 	elsif body == 'talk'
-		session ['last_intent'] = 'talk_job'
+
 		send_sms_to sender, "I already told you never chose this one!"
+		sleep(2)
 		send_sms_to sender, "Then you have to bear the consequences..."
+		sleep(2)
 		send_sms_to sender, "I have to ask you a serious but awful question."
+		sleep(2)
+		#session ["last_intent"] = "talk_job"
 		response += "How is your job hunting now?"
-	elsif session['last_intent'] == 'talk_job'
-		feeling = sentiment body
-		if feeling < 0
-			send_sms_to sender, "Although I'm sorry to hear that, you have to cheer up!"
-			sleep (2)
-			response += "Here is a joke:
-I quit my job working for Nike. Just couldn’t do it anymore."
-		else
-			send_sms_to sender, "Glad to hear it! I think I definitely contributed a lot."
-			response += "But it doesn't mean you can relax. Keep moving and reply 'start' to me!!!"
-		end
+	elsif body == "I didn't get a job"
+		send_sms_to sender, "Although I'm sorry to hear that, you have to cheer up!"
+		sleep (2)
+		response += "Here is a joke:
+#I quit my job working for Nike. Just couldn’t do it anymore."
+	elsif body == "good"
+		send_sms_to sender, "Glad to hear it! I think I definitely contributed a lot."
+		sleep (2)
+		response += "But it doesn't mean you can relax. Keep moving and reply 'start' to me!!!"
+	#elsif session['last_intent'] == 'talk_job'
+		#feeling = sentiment body
+		#if feeling < 0
+			#send_sms_to sender, "Although I'm sorry to hear that, you have to cheer up!"
+			#sleep (2)
+			#response += "Here is a joke:
+#I quit my job working for Nike. Just couldn’t do it anymore."
+		#else
+			#send_sms_to sender, "Glad to hear it! I think I definitely contributed a lot."
+			#sleep (2)
+			#response += "But it doesn't mean you can relax. Keep moving and reply 'start' to me!!!"
+		#end
 	elsif include_keywords body, who_kwd
 		smirk = emoji "smirk"
 		response += "I'm Walker! I'm smart #{smirk} and know
@@ -320,7 +334,7 @@ Or reply 'start' to see what others you can do."
 	elsif body == "skill"
 		session["last_intent"] = "ask_skill"
 		response += "Tell me one skill you have~"
-	elsif session["last_intent"] == 'ask_skill'
+	elsif session["last_intent"] == "ask_skill"
 		related_skills = related_skills body
 		send_sms_to sender, "Here are some similar skills:
 #{related_skills}"
