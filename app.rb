@@ -118,24 +118,6 @@ get '/test/conversation' do
 	end
 end
 
-get '/html' do
-	erb :"signup"
-end
-
-get "/test/sms" do
-	client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
-
-	message = "This is Ruwen first chatbot."
-
-	# This will send a message from any end point
-	client.api.account.messages.create(
-		from: ENV["TWILIO_FROM"],
-		to: ENV["TEST_NUMBER"],
-		body: message
-	)
-
-
-end
 
 get "/sms/incoming" do
 	session[:counter] ||= 0
@@ -167,22 +149,6 @@ get "/sms/incoming" do
 	twiml.to_s
 
 end
-
-get "/callback" do
-
-	LinkedIn.configure do |config|
-		config.client_id     = ENV["LINKEDIN_API_KEY"]
-		config.client_secret = ENV["LINKEDIN_API_SECRET"]
-		config.redirect_uri  = "https://fathomless-lake-42472.herokuapp.com/callback"
-	end
-
-	api = LinkedIn::API.new(ENV['LINKEDIN_TOKEN'])
-	linkedin = JSON.parse(api.profile(:url => 'https://www.linkedin.com/in/kl-larson/').to_json)
-  puts linkedin
-	"#{linkedin}"
-end
-	#api = LinkedIn::API.new(ENV['LINKEDIN_TOKEN'])
-	#me = api.profile
 
 
 def determine_media_response body
